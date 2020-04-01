@@ -9,7 +9,7 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+  tag: '$(Build.BuildNumber)'
 
 stages:
 - stage: Build
@@ -31,6 +31,7 @@ stages:
     
     - task: Bash@3
       inputs:
+        displayName: Setup OS requirements
         targetType: 'inline'
         script: |
           sudo apt-get -y remove docker docker-engine docker.io containerd runc
@@ -56,4 +57,4 @@ stages:
         repository: 'ravenproject/ravencore-api'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile.arm32v7'
-        tags: 'arm32v7-$(Build.BuildId)'
+        tags: 'arm32v7-$(tag)'
