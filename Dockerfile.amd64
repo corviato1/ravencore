@@ -23,4 +23,6 @@ RUN npm install
 
 COPY run.sh .
 
+RUN sed -i 's/1569945600/1567533600/g' node_modules/ravencore-lib/lib/block/blockheader.js; sed -i 's/3585159200/1585159200/g' node_modules/ravencore-lib/lib/block/blockheader.js
+ 
 CMD ["/app/run.sh"]
