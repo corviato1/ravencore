@@ -6,6 +6,10 @@ else
   network="testnet"
 fi
 
+if [[ ${network} == "testnet" ]]; then
+   sed -i 's/1569945600/1567533600/g' node_modules/ravencore-lib/lib/block/blockheader.js; sed -i 's/3585159200/1585159200/g' node_modules/ravencore-lib/lib/block/blockheader.js
+fi
+
 if [[ ${PORT} ]]; then
   port=${PORT}
 else
