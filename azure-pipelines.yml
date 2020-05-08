@@ -20,15 +20,6 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: Docker@2
-      displayName: Build amd64 images
-      inputs:
-        containerRegistry: 'dockerhub_cadecall'
-        repository: 'ravenproject/ravencore-api'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile.amd64'
-        tags: 'amd64-$(tag)'
-    
     - task: Bash@3
       inputs:
         displayName: Setup OS requirements
@@ -51,10 +42,29 @@ stages:
           docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
           cat /proc/sys/fs/binfmt_misc/qemu-aarch64
     - task: Docker@2
-      displayName: Build arm32v7 images
       inputs:
         containerRegistry: 'dockerhub_cadecall'
-        repository: 'ravenproject/ravencore-api'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile.arm32v7'
-        tags: 'arm32v7-$(tag)'
+        command: 'login'
+    - task: Bash@3
+      displayName: build docker images
+      inputs:
+        targetType: 'inline'
+        script: |
+          docker buildx build --push --platform linux/arm/v7,linux/amd64 --tag ravenproject/ravencore-api:latest .
+#    - task: Docker@2
+#      displayName: Build amd64 images
+#      inputs:
+#        containerRegistry: 'dockerhub_cadecall'
+#        repository: 'ravenproject/ravencore-api'
+#        command: 'buildAndPush'
+#        Dockerfile: '**/Dockerfile.amd64'
+#        tags: 'amd64-$(tag)'
+    
+#    - task: Docker@2
+#      displayName: Build arm32v7 images
+#      inputs:
+#        containerRegistry: 'dockerhub_cadecall'
+#        repository: 'ravenproject/ravencore-api'
+#        command: 'buildAndPush'
+#        Dockerfile: '**/Dockerfile.arm32v7'
+#        tags: 'arm32v7-$(tag)'
