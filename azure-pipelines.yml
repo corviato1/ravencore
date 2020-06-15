@@ -62,9 +62,9 @@ stages:
           cat /proc/sys/fs/binfmt_misc/qemu-aarch64
           ls -la ~/.docker/cli-plugins/docker-buildx
           sudo chmod +x ~/.docker/cli-plugins/docker-buildx
-          
+          sudo systemctl restart docker
           docker buildx build --help
-          
+
           docker buildx build --push --platform linux/arm/v7,linux/amd64 --tag ravenproject/ravencore-api:latest .
           
 #    - task: Bash@3
