@@ -45,19 +45,6 @@ stages:
         defaultVersionType: 'latest'
         itemPattern: 'buildx-*.linux-amd64'
         downloadPath: '$(System.ArtifactsDirectory)'
-    - task: Bash@3
-      displayName: Put buildx in the path
-      inputs:
-        targetType: 'inline'
-        script: |
-          ls $(System.ArtifactsDirectory)
-          mkdir -p ~/.docker/cli-plugins
-          mv $(System.ArtifactsDirectory)/buildx* ~/.docker/cli-plugins/docker-buildx
-          docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
-          cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-          ls -la ~/.docker/cli-plugins/docker-buildx
-          sudo chmod +x ~/.docker/cli-plugins/docker-buildx
-          docker buildx --help
     - task: Docker@2
       displayName: Login to dockerhub
       inputs:
@@ -68,7 +55,22 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          ls $(System.ArtifactsDirectory)
+          mkdir -p ~/.docker/cli-plugins
+          mv $(System.ArtifactsDirectory)/buildx* ~/.docker/cli-plugins/docker-buildx
+          docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
+          cat /proc/sys/fs/binfmt_misc/qemu-aarch64
+          ls -la ~/.docker/cli-plugins/docker-buildx
+          sudo chmod +x ~/.docker/cli-plugins/docker-buildx
+          
           docker buildx build --push --platform linux/arm/v7,linux/amd64 --tag ravenproject/ravencore-api:latest .
+          
+#    - task: Bash@3
+#      displayName: build docker images
+#      inputs:
+#        targetType: 'inline'
+#        script: |
+#          docker buildx build --push --platform linux/arm/v7,linux/amd64 --tag ravenproject/ravencore-api:latest .
 #    - task: Docker@2
 #      displayName: Build amd64 images
 #      inputs:
