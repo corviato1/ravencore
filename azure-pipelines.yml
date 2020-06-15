@@ -55,7 +55,10 @@ stages:
           mv $(System.ArtifactsDirectory)/buildx* ~/.docker/cli-plugins/docker-buildx
           docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
           cat /proc/sys/fs/binfmt_misc/qemu-aarch64
+          sudo systemctl restart docker
+          docker buildx --help
     - task: Docker@2
+      displayName: Login to dockerhub
       inputs:
         containerRegistry: 'dockerhub_cadecall'
         command: 'login'
