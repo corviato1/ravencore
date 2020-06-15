@@ -25,6 +25,8 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          echo "Docker version"
+          docker -v
           sudo apt-get -y remove docker docker-engine docker.io containerd runc
           sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common
           
@@ -35,7 +37,8 @@ stages:
           sudo apt-get -y install docker-ce docker-ce-cli containerd.io
           
           export DOCKER_BUILDKIT=1
-          
+          echo "Docker version"
+          docker -v
           #docker build --platform=local -o . git://github.com/docker/buildx
     - task: DownloadGitHubRelease@0
       displayName: Download docker buildx release
@@ -55,6 +58,8 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
+          export DOCKER_BUILDKIT=1
+
           ls $(System.ArtifactsDirectory)
           mkdir -p ~/.docker/cli-plugins
           mv $(System.ArtifactsDirectory)/buildx* ~/.docker/cli-plugins/docker-buildx
