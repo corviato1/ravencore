@@ -61,7 +61,7 @@ stages:
           export DOCKER_BUILDKIT=1
           docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
           cat /proc/sys/fs/binfmt_misc/qemu-aarch64
-
+          docker buildx create --use --name build --node build --driver-opt network=host
           docker buildx build --push --platform linux/arm/v7,linux/amd64 --tag ravenproject/ravencore-api:latest .
           docker buildx build --help
 #          ls -la ~/.docker/cli-plugins/docker-buildx
